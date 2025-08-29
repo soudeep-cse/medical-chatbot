@@ -1,52 +1,78 @@
-# Medical Chatbot with Continuous Conversation and Retrieval-Augmented Generation (RAG)
+# Medical Chatbot with CrewAI, RAG, and Web Search
 
-This project implements a medical chatbot that supports **natural multi-turn conversations** and provides **accurate, context-aware answers** using a Retrieval-Augmented Generation (RAG) system based on a specific medical book PDF.
+This project implements a sophisticated medical chatbot that leverages **CrewAI** to manage a team of specialized AI agents. The chatbot provides accurate, context-aware answers by combining a Retrieval-Augmented Generation (RAG) system with web search capabilities.
+
+---
+
+## Project Description
+
+This project is a conversational medical assistant that uses a combination of AI agents to provide comprehensive medical information. It is built with **CrewAI** to orchestrate a team of specialized agents, each with a specific role:
+
+- **RAG Agent:** Answers questions based on a knowledge base of medical books.
+- **Web Search Agent:** Searches the web for information not found in the local knowledge base.
+- **Medicine Info Agent:** Provides information about specific medicines.
+- **Tavily Answer Agent:** A specialized agent for finding prices and medicine names.
+
+The application is built with a **FastAPI** backend and a **Streamlit** frontend, providing both a robust API and an easy-to-use interface.
 
 ---
 
 ## Features
 
-- **Continuous multi-turn chat** with conversation memory to remember user context and maintain dialogue flow.
-- **Retrieval-Augmented Generation (RAG)** to answer symptom- and treatment-specific queries by retrieving relevant information from a medical book.
-- **Intent-based routing** between a conversational chat chain and a RAG-based Q&A chain.
-- Supports bilingual user input (e.g., Bangla and English).
-- Uses LangChain LCEL framework for modular and scalable pipeline construction.
-- Memory backend can be in-memory or Redis for production use.
+- **Multi-Agent System:** Uses **CrewAI** to manage a team of specialized AI agents.
+- **Retrieval-Augmented Generation (RAG):** Answers questions by retrieving information from a local knowledge base of medical books.
+- **Web Search Fallback:** Automatically searches the web if the answer is not found in the local knowledge base.
+- **Continuous Conversation:** Maintains conversation history for a natural, multi-turn chat experience.
+- **Bilingual Support:** Can handle both English and Bangla user input.
+- **Scalable Architecture:** Built with LangChain LCEL for a modular and scalable pipeline.
+- **Persistent Memory:** Uses Redis for a persistent memory backend.
 
 ---
 
-## Architecture Overview
+## Technologies and Frameworks
 
-### 1. Continuous Chat Chain
-- Uses `RunnableWithMessageHistory` to maintain conversation history.
-- Handles general dialogue, clarifications, greetings, empathy, and small talk.
-- Stores conversation memory per user session.
-
-### 2. Q&A (RAG) Chain
-- Uses vector search to retrieve relevant passages from a medical book PDF.
-- Injects retrieved context into a prompt instructing the model to answer factually and precisely.
-- Stateless chain handling symptom- and treatment-specific queries.
-
-### 3. Orchestrator / Router
-- Detects user intent (via heuristic or ML classifier).
-- Routes user inputs to either the chat chain or Q&A chain accordingly.
-- Combines responses seamlessly for natural user experience.
+- **Core:** LangChain, FastAPI, Streamlit, CrewAI
+- **LLM:** OpenAI's GPT-4 and `text-embedding-3-large`
+- **Vector Store:** ChromaDB
+- **Web Search:** Tavily
+- **Memory:** Redis and in-memory `ConversationBufferWindowMemory`.
+- **UI:** Streamlit
+- **Backend:** FastAPI
 
 ---
 
-## Usage
+## Models Used
+
+- **Generation:** `gpt-4`
+- **Embeddings:** `text-embedding-3-large`
+
+---
+
+## How to Run
 
 ### Prerequisites
 
 - Python 3.8+
-- LangChain LCEL
-- OpenAI API key (or compatible LLM provider)
+- OpenAI API key
 - Redis (optional, for persistent memory)
-- Vector database (e.g., Chroma, FAISS) with medical book embeddings
 
 ### Setup
 
-1. Install dependencies:
+1.  Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+2.  Set up your environment variables by creating a `.env` file from the `.env.example`.
 
-```bash
-pip install langchain-openai langchain-core redis chromadb
+### Running the Application
+
+1.  **Run the FastAPI server:**
+    ```bash
+    uvicorn app:app --reload
+    ```
+2.  **Run the Streamlit UI:**
+    ```bash
+    streamlit run chat_ui.py
+    ```
+
+Now you can open the Streamlit UI in your browser to interact with the chatbot.
